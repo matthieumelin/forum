@@ -10,18 +10,36 @@ import styled from "styled-components";
 // assets
 import Logo from "../logo.svg";
 
+// redux
+import { useSelector, useDispatch } from "react-redux";
+import { setToken} from "../redux/reducers";
+
 export default function Header() {
+  const displayName = useSelector((state) => state.user.displayName);
+  const token = useSelector((state) => state.user.token);
+  
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    sessionStorage.clear();
+
+    dispatch(setToken(""));
+  };
+
   return (
     <StyledHeader>
       <Navbar>
         <NavbarBrand src={Logo} />
         <NavbarSearchInput placeholder="Search for Topics" />
-        <NavLink to={Routes.Register}>
-          <NavbarProfile
-            src="https://i.pravatar.cc/300"
-            alt="Photo de profil"
-          />
-        </NavLink>
+        {token ? (
+          <NavLink to={Routes.Login}>
+            <NavbarProfile
+              src="https://i.pravatar.cc/300"
+              alt="Photo de profil"
+            />
+            {displayName}
+          </NavLink>
+        ) : null}
       </Navbar>
     </StyledHeader>
   );

@@ -21,7 +21,7 @@ export default function Form({
   password = false,
   remember = false,
   title,
-  axiosRequest,
+  request,
 }) {
   const [inputs, setInputs] = useState({
     displayName: "",
@@ -32,8 +32,12 @@ export default function Form({
   const [errors, setErrors] = useState([]);
 
   const handleInput = (event) => {
-    setInputs({ ...inputs, [event.target.id]: event.target.id === "remember" ? !inputs.remember : event.target.value });
-};
+    setInputs({
+      ...inputs,
+      [event.target.id]:
+        event.target.id === "remember" ? !inputs.remember : event.target.value,
+    });
+  };
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -53,10 +57,10 @@ export default function Form({
         tempErrors["password"] = "You must fill in the password field.";
       }
     }
-    if (tempErrors) {
+    if (tempErrors.length > 0) {
       setErrors(tempErrors);
     } else {
-      axiosRequest();
+      request(inputs, setErrors);
     }
   };
 
